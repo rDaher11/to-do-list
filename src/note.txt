@@ -1,0 +1,10 @@
+1.remember to test that if the user type a wrong id -- done
+2.fix update problem -- done
+3.add enum as status -- done
+4.Add, Update, and Delete tasks -- done
+5.Mark a task as in progress or done -- done
+6.List all tasks -- done
+7.List all tasks that are done
+
+
+
