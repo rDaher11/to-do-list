@@ -1,5 +1,7 @@
 package repositories;
 
+import exceptions.NoTasksAvailableException;
+import exceptions.TaskNotFoundException;
 import models.Status;
 import models.Task;
 import utils.JsonOperations;
@@ -37,16 +39,16 @@ public class InMemoryTaskRepository implements TaskRepository{
     }
 
     @Override
-    public void deleteTask(Integer currentId) {
+    public void deleteTask(Integer currentId) throws TaskNotFoundException{
         if (checkId(currentId)) {
             taskList.removeIf(task -> task.getId().equals(currentId));
         } else {
-            throw new RuntimeException("Wrong task id");
+            throw new TaskNotFoundException("Task with id" +currentId + "not found") ;
         }
     }
 
     @Override
-    public void editTask(Integer currentId, String description) {
+    public void editTask(Integer currentId, String description) throws TaskNotFoundException {
         if(checkId(currentId)) {
             taskList.stream()
                     .filter(task -> task.getId().equals(currentId))
@@ -57,7 +59,7 @@ public class InMemoryTaskRepository implements TaskRepository{
                     })
             ;
         } else {
-            throw new RuntimeException("Wrong task id") ;
+            throw new TaskNotFoundException("Task with id" +currentId + "not found") ;
         }
     }
 
@@ -67,7 +69,7 @@ public class InMemoryTaskRepository implements TaskRepository{
     }
 
     @Override
-    public void changeTaskStatus(Integer currentId, Status status) {
+    public void changeTaskStatus(Integer currentId, Status status) throws TaskNotFoundException {
         if (checkId(currentId)) {
             taskList.stream()
                     .filter(task -> task.getId().equals(currentId))
@@ -77,17 +79,23 @@ public class InMemoryTaskRepository implements TaskRepository{
                         task.setUpdateAt(LocalDate.now());
                     });
         } else {
-            throw new RuntimeException("Wrong task id") ;
+            throw new TaskNotFoundException("Task with id " +currentId + "not found") ;
         }
     }
 
     @Override
-    public List<Task> listAllTasks() {
-        return getTaskList();
+    public List<Task> listAllTasks() throws NoTasksAvailableException {
+        if (taskList.isEmpty()) {
+            throw new NoTasksAvailableException("No tasks available.") ;
+        }
+        return taskList;
     }
 
     @Override
-    public void changeAllTaskStatus(Status status) {
+    public void changeAllTaskStatus(Status status) throws NoTasksAvailableException {
+        if(taskList.isEmpty()) {
+            throw new NoTasksAvailableException("Cannot change status. No tasks available.") ;
+        }
         taskList.parallelStream()
                 .forEach(task -> {
                     task.setStatus(status);

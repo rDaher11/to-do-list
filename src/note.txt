@@ -7,4 +7,7 @@
 7.List all tasks that are done
 
 
+the controller take Command as data type
+
+
 

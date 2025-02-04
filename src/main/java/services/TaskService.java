@@ -1,36 +1,45 @@
 package services;
 
+import exceptions.NoTasksAvailableException;
+import exceptions.TaskNotFoundException;
 import models.Status;
 import models.Task;
 import repositories.TaskRepository;
 
 import java.util.List;
 
-public class TaskService {
+public class TaskService implements ITaskService {
     TaskRepository taskRepository ;
 
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
-    public void addTask(Task newTask) {
+    @Override
+    public void addTask(Task newTask)  {
         this.taskRepository.saveTask(newTask);
     }
-    public void deleteTask(Integer currentId) {
+    @Override
+    public void deleteTask(Integer currentId) throws TaskNotFoundException {
         this.taskRepository.deleteTask(currentId);
     }
-    public void editTask(Integer currentId , String description) {
+    @Override
+    public void editTask(Integer currentId , String description) throws TaskNotFoundException {
         this.taskRepository.editTask(currentId,description);
     }
+    @Override
     public void checkId(Integer currentId) {
         this.taskRepository.checkId(currentId);
     }
-    public void changeTaskStatus(Integer currentId, Status status) {
+    @Override
+    public void changeTaskStatus(Integer currentId, Status status) throws TaskNotFoundException {
         this.taskRepository.changeTaskStatus(currentId,status);
     }
-    public List<Task> listAllTasks() {
+    @Override
+    public List<Task> listAllTasks()throws NoTasksAvailableException {
         return taskRepository.listAllTasks();
     }
-    public void changeAllTaskStatus(Status status) {
+    @Override
+    public void changeAllTaskStatus(Status status) throws NoTasksAvailableException {
         this.taskRepository.changeAllTaskStatus(status);
     }
 }
