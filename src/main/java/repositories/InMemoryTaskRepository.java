@@ -92,15 +92,25 @@ public class InMemoryTaskRepository implements TaskRepository{
     }
 
     @Override
-    public void changeAllTaskStatus(Status status) throws NoTasksAvailableException {
+    public List<Task> listAllTaskStatus(Status status) {
         if(taskList.isEmpty()) {
-            throw new NoTasksAvailableException("Cannot change status. No tasks available.") ;
+            throw new NoTasksAvailableException("No tasks available.") ;
         }
-        taskList.parallelStream()
-                .forEach(task -> {
-                    task.setStatus(status);
-                    task.setUpdateAt(LocalDate.now());
-                });
+        List<Task> specificTasks = taskList.parallelStream().
+                filter(task -> task.getStatus().equals(status)).
+                toList();
+        if (specificTasks.isEmpty()) {
+            throw new NoTasksAvailableException("No tasks available.") ;
+        }
+        return specificTasks;
+    }
+
+    @Override
+    public Integer getLastId()throws NoTasksAvailableException {
+        if (taskList.isEmpty()) {
+            throw new NoTasksAvailableException("No tasks available") ;
+        }
+        return taskList.size();
     }
 
     public File creatFile(String filePath) throws IOException{

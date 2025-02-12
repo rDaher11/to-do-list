@@ -14,5 +14,6 @@ public interface TaskRepository {
     public boolean checkId(Integer currentId) ;
     public void changeTaskStatus(Integer currentId , Status status) throws TaskNotFoundException;
     public List<Task> listAllTasks() throws NoTasksAvailableException;
-    public void changeAllTaskStatus(Status status) throws NoTasksAvailableException;
+    public List<Task> listAllTaskStatus(Status status) throws NoTasksAvailableException;
+    public Integer getLastId() throws NoTasksAvailableException ;
 }

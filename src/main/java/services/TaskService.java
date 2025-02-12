@@ -1,3 +1,4 @@
+
 package services;
 
 import exceptions.NoTasksAvailableException;
@@ -39,7 +40,12 @@ public class TaskService implements ITaskService {
         return taskRepository.listAllTasks();
     }
     @Override
-    public void changeAllTaskStatus(Status status) throws NoTasksAvailableException {
-        this.taskRepository.changeAllTaskStatus(status);
+    public List<Task> listAllTaskStatus(Status status) throws NoTasksAvailableException {
+        return this.taskRepository.listAllTaskStatus(status);
     }
+    @Override
+    public Integer getLastId() throws NoTasksAvailableException{
+        return this.taskRepository.getLastId();
+    }
+
 }
