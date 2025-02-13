@@ -3,10 +3,12 @@ package services;
 
 import exceptions.NoTasksAvailableException;
 import exceptions.TaskNotFoundException;
+import models.RepositoryType;
 import models.Status;
 import models.Task;
 import repositories.TaskRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 public class TaskService implements ITaskService {
@@ -44,8 +46,12 @@ public class TaskService implements ITaskService {
         return this.taskRepository.listAllTaskStatus(status);
     }
     @Override
-    public Integer getLastId() throws NoTasksAvailableException{
+    public Integer getLastId() {
         return this.taskRepository.getLastId();
+    }
+    @Override
+    public void saveAs(RepositoryType repositoryType) throws IOException {
+        this.taskRepository.saveAs(repositoryType);
     }
 
 }

@@ -2,6 +2,7 @@ package repositories;
 
 import exceptions.NoTasksAvailableException;
 import exceptions.TaskNotFoundException;
+import models.RepositoryType;
 import models.Status;
 import models.Task;
 import utils.JsonOperations;
@@ -106,11 +107,18 @@ public class InMemoryTaskRepository implements TaskRepository{
     }
 
     @Override
-    public Integer getLastId()throws NoTasksAvailableException {
-        if (taskList.isEmpty()) {
-            throw new NoTasksAvailableException("No tasks available") ;
-        }
+    public Integer getLastId() {
         return taskList.size();
+    }
+
+
+    @Override
+    public void saveAs (RepositoryType repositoryType) throws IOException {
+        switch (repositoryType) {
+            case JSON :
+                JsonOperations.saveListOfTasks(taskList,new File(FILEPATH));
+                break;
+        }
     }
 
     public File creatFile(String filePath) throws IOException{
@@ -138,5 +146,7 @@ public class InMemoryTaskRepository implements TaskRepository{
             throw new RuntimeException(e);
         }
     }
+
+
 
 }

@@ -1,14 +1,18 @@
 package controllers;
 
 import exceptions.TaskNotFoundException;
+import models.RepositoryType;
 import models.Status;
 import models.Task;
 import services.ITaskService;
 import views.ITaskView;
 
+import java.io.IOException;
+
 public class TaskController {
     ITaskService taskService;
     ITaskView taskView ;
+    private RepositoryType repositoryType = RepositoryType.JSON;
     public TaskController(ITaskService taskService ,ITaskView taskView) {
         this.taskService = taskService;
         this.taskView = taskView ;
@@ -61,5 +65,23 @@ public class TaskController {
             taskView.error(e.getMessage());
         }
     }
+    public Integer getLastId() {
+        return taskService.getLastId();
+    }
 
+    public void sync()  {
+        try {
+            taskService.saveAs(repositoryType);
+        } catch (IOException e) {
+            taskView.error("File error : " + e.getMessage() );
+        }
+    }
+
+    public RepositoryType getRepositoryType() {
+        return repositoryType;
+    }
+
+    public void setRepositoryType(RepositoryType repositoryType) {
+        this.repositoryType = repositoryType;
+    }
 }

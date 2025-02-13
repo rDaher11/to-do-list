@@ -3,6 +3,7 @@ package utils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import models.Task;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +21,7 @@ public class JsonOperations {
         configureMapper.writerWithDefaultPrettyPrinter();
         configureMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES , false) ;
         configureMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true) ;
+        configureMapper.registerModule(new JavaTimeModule()) ;
         return  configureMapper ;
     }
     public static List<Task> readListOfTasks(File jsonFile) throws IOException {
